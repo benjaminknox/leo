@@ -29,7 +29,9 @@
   export let required = false
   export let mode: Mode = 'outline'
 
-  let dispatch = createEventDispatcher()
+  let dispatch = createEventDispatcher<{
+    change: CustomEvent
+  }>()
 
   let isOpen = false
   let button: HTMLButtonElement
