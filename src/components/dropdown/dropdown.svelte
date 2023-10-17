@@ -30,7 +30,7 @@
   export let mode: Mode = 'outline'
 
   let dispatch = createEventDispatcher<{
-    change: CustomEvent
+    change: { value: string }
   }>()
 
   let isOpen = false
