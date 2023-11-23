@@ -180,6 +180,7 @@
     border-radius: var(--radius);
     border: var(--border-width) solid var(--border-color);
     font: var(--leo-font-primary-default-regular);
+    white-space: nowrap;
   }
 
   .leo-tooltip .tooltip {
