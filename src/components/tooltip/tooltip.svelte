@@ -18,6 +18,12 @@
   export let offset: number = 8
   export let mode: Mode = 'mini'
 
+  /** The width of the tooltip */
+  export let width: number | undefined = undefined
+
+  let tooltipWidth = width && `${width}px`
+  let whiteSpace = tooltipWidth ? 'normal' : 'nowrap';
+
   /** The length of time the tooltip is open in ms after mouse leave of
    * the trigger or tooltip */
   export let mouseleaveTimeout: number = 150
@@ -114,7 +120,7 @@
   }
 </script>
 
-<div class="leo-tooltip">
+<div class="leo-tooltip" style="--width: {tooltipWidth}; --white-space: {whiteSpace};">
   {#key visibleInternal}
     <Floating
       target={trigger}
@@ -180,7 +186,8 @@
     border-radius: var(--radius);
     border: var(--border-width) solid var(--border-color);
     font: var(--leo-font-primary-default-regular);
-    white-space: nowrap;
+    white-space: var(--white-space);
+    width: var(--width);
   }
 
   .leo-tooltip .tooltip {
