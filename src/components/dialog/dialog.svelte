@@ -165,12 +165,12 @@
    * however for webcomponents, we don't need to check for this, so we special
    * case the selector with :host. */
   :host .leo-dialog.hasActions,
-  .leo-dialog.hasActions:has([slot='actions']:not(:empty)) {
+  :global(.leo-dialog.hasActions:has([slot='actions']:not(:empty))) {
     grid-template-rows: auto auto;
   }
 
   :host .leo-dialog.hasHeader.hasActions,
-  .leo-dialog.hasHeader.hasActions:has(.actions [slot='actions']:not(:empty)) {
+  :global(.leo-dialog.hasHeader.hasActions:has(.actions [slot='actions']:not(:empty))) {
     grid-template-rows: auto auto auto;
   }
 
@@ -245,12 +245,12 @@
   }
 
   :host .leo-dialog .actions .body,
-  .leo-dialog.hasActions:has([slot='actions']:not(:empty)) .body {
+  :global(.leo-dialog.hasActions:has([slot='actions']:not(:empty)) .body) {
     padding-bottom: 0;
   }
 
   :host .leo-dialog .actions,
-  .leo-dialog .actions:has([slot='actions']:not(:empty)) {
+  :global(.leo-dialog .actions:has([slot='actions']:not(:empty))) {
     background: var(--background);
     padding: var(--padding);
   }
