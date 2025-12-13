@@ -181,7 +181,7 @@
     outline: none;
   }
 
-  details[open] .arrow {
+  :global(details[open] .arrow) {
     transform: rotate(180deg);
   }
 }
