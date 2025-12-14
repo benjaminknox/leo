@@ -180,7 +180,7 @@
         border-color: var(--border-color-hover);
       }
 
-      & .container:has(*:focus-visible),
+      & :global(.container:has(*:focus-visible)),
       &.isFocused .container {
         &:not(:has(.extra-content:focus-within)) {
           color: var(--color-focus);
@@ -194,7 +194,7 @@
         color: var(--leo-color-systemfeedback-error-icon);
       }
 
-      &.error .container:hover:not(:has(*:focus-visible)) {
+      &.error :global(.container:hover:not(:has(*:focus-visible))) {
         border-color: var(--border-color-error-hover);
       }
     }
