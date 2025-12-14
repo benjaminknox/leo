@@ -70,7 +70,7 @@
   }
 
   :global(.leo-alert .actions > *),
-  .leo-alert .actions ::slotted(*) {
+  :global(.leo-alert .actions ::slotted(*)) {
     display: flex;
     flex-direction: row;
     gap: var(--leo-spacing-m);
