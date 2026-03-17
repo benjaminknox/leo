@@ -188,7 +188,7 @@
      * Should only be necessary for Tailwind consumers where there's
      * no guarantee that the button will contain a child element.
      */
-    &:not(:has(> :global(*))) {
+    &:not(:has(> *)) {
       padding-left: var(
         --leo-button-padding,
         calc(var(--padding-x) + var(--icon-gap))

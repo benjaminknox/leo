@@ -250,7 +250,7 @@
   }
 
   :host .leo-dialog .actions,
-  .leo-dialog :global(.actions:has([slot=actions]:not(:empty))) {
+  .leo-dialog .actions:has(:global([slot=actions]:not(:empty))) {
     background: var(--background);
     padding: var(--padding);
   }
