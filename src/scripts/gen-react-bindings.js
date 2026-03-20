@@ -39,6 +39,14 @@ const getComponentGenerics = async (svelteFilePath, componentName) => {
   )
 }
 
+// For a conditional constraint like "undefined extends Href ? boolean : undefined",
+// return the union of both branches ("boolean | undefined"). This lets us substitute
+// a concrete upper bound so TypeScript doesn't need to evaluate a conditional chain.
+const upperBound = (constraint) => {
+  const m = constraint?.match(/\?(.+):(.+)$/)
+  return m ? `${m[1].trim()} | ${m[2].trim()}` : constraint ?? 'any'
+}
+
 const getReactFileContents = async (svelteFilePath) => {
   // for example:
   // ./src/components/button/button.svelte ==> button
@@ -69,7 +77,27 @@ export default SvelteToReact('${COMPONENT_PREFIX}-${fileNameWithoutExtension.toL
 export * from '../web-components/${fileNameWithoutExtension}.js'
     `.trim()
 
-  const typeDef = `
+  const hasConditionalConstraints = generics.some((genericType) =>
+    genericType.constraint?.includes('?')
+  )
+
+  // When any generic has a conditional constraint (e.g. `undefined extends Href ?
+  // boolean : undefined`), threading those params through ReactProps causes TypeScript
+  // to hit the instantiation depth limit. Instead, substitute each generic with its
+  // upper bound (union of both branches) to produce a concrete, resolvable type.
+  const typeDef = hasConditionalConstraints
+    ? `
+import type * as React from 'react'
+import type { ReactProps } from '../src/components/svelte-react'
+import type { ${componentName}Props as SvelteProps } from '../types/src/components/${containingFolder}/${fileName}';
+export type ${componentName}Props = ReactProps<Omit<SvelteProps<${generics.map((genericType) => upperBound(genericType.constraint)).join(', ')}>, 'children'>>;
+export default function ${componentName}(props: React.PropsWithChildren<${componentName}Props>): JSX.Element
+
+// As we don't currently have type definitions for the web components, export
+// the Type Definitions from the Svelte component.
+export * from '../types/src/components/${containingFolder}/${fileName}'
+      `.trim()
+    : `
 import type * as React from 'react'
 import type { ReactProps } from '../src/components/svelte-react'
 import type { ${componentName}Props as SvelteProps } from '../types/src/components/${containingFolder}/${fileName}';
@@ -79,7 +107,7 @@ export default function ${componentName}${funcConstraints}(props: React.PropsWit
 // As we don't currently have type definitions for the web components, export
 // the Type Definitions from the Svelte component.
 export * from '../types/src/components/${containingFolder}/${fileName}'
-    `.trim()
+      `.trim()
 
   return [binding, typeDef]
 }
