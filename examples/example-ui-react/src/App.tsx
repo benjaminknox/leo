@@ -9,6 +9,19 @@ import Dropdown from '@brave/leo/react/dropdown'
 import ButtonMenu from '@brave/leo/react/buttonMenu'
 import Toggle from '@brave/leo/react/toggle'
 import Icon from '@brave/leo/react/icon'
+import Link from '@brave/leo/react/link'
+import Alert from '@brave/leo/react/alert'
+import Checkbox from '@brave/leo/react/checkbox'
+import Collapse from '@brave/leo/react/collapse'
+import Dialog from '@brave/leo/react/dialog'
+import Label from '@brave/leo/react/label'
+import NavDots from '@brave/leo/react/navdots'
+import ProgressBar from '@brave/leo/react/progressBar'
+import ProgressRing from '@brave/leo/react/progressRing'
+import RadioButton from '@brave/leo/react/radioButton'
+import SegmentedControl from '@brave/leo/react/segmentedControl'
+import SegmentedControlItem from '@brave/leo/react/segmentedControlItem'
+import TextArea from '@brave/leo/react/textarea'
 
 import '@fontsource/poppins/500.css'
 import '@fontsource/poppins/600.css'
@@ -19,15 +32,61 @@ function App() {
   const [buttonText, setButtonText] = React.useState('I am a LEO Button')
   const [spinning, setSpinning] = React.useState(false)
   const [isThing, setIsThing] = React.useState(false)
+  const [activeDot, setActiveDot] = React.useState(0)
+  const [radioButtonValue, setRadioButtonValue] = React.useState("radio 1")
+  const [segmentedControlValue, setSegmentedControlValue] = React.useState<string | undefined>("full")
+  const [collapsableOpen, toggleCollapsable] = React.useReducer(
+    (state) => !state,
+    false
+  )
+  const [dialogOpen, toggleDialogOpen] = React.useReducer(
+    (state) => !state,
+    false
+  )
 
   const handleAction = () => console.log('action')
 
   return (
     <>
+      <Alert>Alert content</Alert>
+      <Dialog isOpen={dialogOpen} onClose={toggleDialogOpen}>
+        Dialog content
+      </Dialog>
       <header>
         <h1>A React App</h1>
+        <NavDots onChange={(dot) => setActiveDot(dot.activeDot)} activeDot={activeDot} dotCount={10} />
       </header>
-      <section>
+      <section style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'stretch', gap: '1.5rem'}}>
+        <SegmentedControl value={segmentedControlValue} onChange={(evt) => setSegmentedControlValue(evt.value)}>
+          <SegmentedControlItem value="full">
+            <Icon slot="icon-before" name="check-circle-outline" />
+            Full
+          </SegmentedControlItem>
+
+          <SegmentedControlItem value="simple">
+            <Icon slot="icon-before" name="check-circle-outline" />
+            Simple
+          </SegmentedControlItem>
+        </SegmentedControl>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <RadioButton value="radio 1" onChange={(evt) => setRadioButtonValue(evt.value)} name="radio-component" currentValue={radioButtonValue} size="small" />
+          <RadioButton value="radio 2" onChange={(evt) => setRadioButtonValue(evt.value)} name="radio-component" currentValue={radioButtonValue} size="small" />
+        </div>
+        <TextArea>Text Area</TextArea>
+        <ProgressRing />
+        <ProgressBar progress={0.5} />
+        <LeoButton onClick={toggleDialogOpen}>Open Dialog</LeoButton>
+        <Collapse
+          title="A Collapsable"
+          isOpen={collapsableOpen}
+          onToggle={toggleCollapsable}
+        >
+          Collapsable Content
+        </Collapse>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <Checkbox checked /> Checkbox
+        </div>
+        <Label color="secondary">Label Content</Label>
         <Input value={buttonText} onInput={(e: any) => setButtonText(e.value)}>
           Edit the button text:
           {buttonText.length % 2 === 0 && (
@@ -91,6 +150,9 @@ function App() {
         <Tooltip text="Hello World">
           <LeoButton href="#foo">Link button!</LeoButton>
         </Tooltip>
+        <Link href="https://brave.com">Link as anchor tag</Link>
+        <Link type="submit">Link as button</Link>
+        <LeoButton href="https://brave.com">Button as anchor tag</LeoButton>
       </section>
     </>
   )
